@@ -1,3 +1,5 @@
+[🇵🇹 Ler em Português](README.pt.md) | 🇺🇸 English
+
 # 🚜 Realistic Engine Temperature (RET)
 **Current Version:** 7.0.x  |  **Farming Simulator 25**
 
