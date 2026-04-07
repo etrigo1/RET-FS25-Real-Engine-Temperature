@@ -1,1 +1,1 @@
-# -RET-FS25-Real-Engine-Temperature
+# RET-FS25-Real-Engine-Temperature
