@@ -26,11 +26,12 @@ O Farming Simulator não faz distinção dos motores, mas o RET faz! O mod detet
 ### 3. Válvulas e Termostatos Inteligentes
 No trator padrão (Água), a física é controlada por um **Termostato**. Durante os primeiros minutos da manhã ele está fechado (0%) a reter calor na cabine usando injeção rica de combustível (fast warmup). Ao pisar os 85ºC a válvula abre dinamicamente em percentagem para invocar as ventoinhas do Radiador Central e travar a subida!
 
-### 4. Dano Mecânico e Falhas Estocásticas (Avarias de Sobreaquecimento)
-O seu trator já está bastante desgastado no ecrã de reparação? Prepare-se para a lotaria mecânica!
-A **Válvula do Termostato pode avariar em movimento** perante um trator envelhecido:
-*   **Encravar Aberta:** O trator não consegue manter temperatura e trabalha cronicamente a frio (danificando os cilindros em esforço).
-*   **Encravar Fechada:** O fluxo para o radiador é cortado. A água ferve, o alarme da cabine soa e o motor sofrerá dano imediato até encostar!
+### 4. Sistema de Desgaste Avançado e Avarias Físicas (Reais)
+O seu trator já está bastante desgastado no ecrã de reparação nativo do jogo? Prepare-se para a lotaria mecânica! O mod opera em duas frentes de castigo diferentes:
+*   **Desgaste Acelerado:** Pune severamente a barra de Manutenção do Farming Simulator se o jogador conduzir com o óleo gelado no limite das RPMs ou ferver o trator em subidas.
+*   **Avarias Mecânicas Reais:** A **Válvula do Termostato pode fisicamente encravar em movimento** perante um trator com baixa "manutenção", alterando as leis da física daquele motor no momento:
+    *   **Encravar Aberta:** O trator não consegue manter temperatura e trabalha cronicamente a frio (danificando novamente pelo Desgaste Acelerado).
+    *   **Encravar Fechada:** O fluxo para o radiador fica barrado. A água ferve sem travão, o alarme da cabine soa e o motor sofrerá dano imediato até estacionar!
 
 *(A gravidade e a fecho das válvulas flutua percentualmente com cada percentagem de estrago do veículo).*
 
@@ -69,13 +70,30 @@ O sistema tem memória por Trator e sincroniza tudo do lado do Servidor com Mult
 
 ---
 
-## ⚙️ Personalização Descomprometida
-És criador de servidores de Hard-Roleplay ou um Mestre da Física? O Mod vai criar a pasta física `modSettings/RealisticEngineTemp/` nos teus documentos de jogo mal entres na primeira gravação.
-Dentro do ficheiro **`Config.xml`** és literalmente dono das Leis da Física. Podes:
-- Alterar as taxas de aquecimento passivas em Graus por Milissegundo.
-- Mudar a que Grau a válvula entra em alerta e abre (ex: de 85ºC para 95ºC).
-- Mudar o Quociente de aquecimento de todas as baterias elétricas no mapa!
+## ⚙️ Personalização Descomprometida e Guia do Config.xml
+
+És criador de servidores de Hard-Roleplay ou um Mestre da Física? O Mod vai criar o ficheiro `modSettings/RealisticEngineTemp/Config.xml` nos teus documentos de jogo mal entres na primeira gravação. Dentro dele tu és literalmente dono das Leis da Física.
+
 *(Sempre que a versão do mod for atualizada o sistema retém os teus números do XML e só introduz limpidamente as chaves das versões novas - Nunca mais perderás uma calibração tua)*.
+
+### 📚 Dicionário das Principais Variáveis de Configuração:
+*   **`Group00_Meta`**:
+    *   `enableMultiplayerSync`: (true/false) Sincroniza as temperaturas com os restantes jogadores no servidor.
+    *   `enableDataLogging`: (true/false) Exporta telemetria do motor em tempo real para um ficheiro Excel (`.csv`).
+*   **`Group02_Debug_Master & Group04_HUD_Elements`**: Ativam a interface (HUD) e controlam que métricas são visíveis (Válvula, Dados Técnicos, Limites). O `uiRefreshRateBaseMs` dita a rapidez de atualização do texto.
+*   **`Group05_General_Physics`**:
+    *   `globalSpeed`: O multiplicador da velocidade das leis da física.
+    *   `refAmbientTemp`: O clima ambiente de referência (ex: 20.0ºC) onde o aquecimento começa a agir.
+    *   `warmupFastMultiplier`: Multiplicador durante arranques a frio (<60ºC) simulando injeção rica de combustível.
+*   **`Group06_Thermostat_Settings` (Água / Ar / Elétricos)**:
+    *   `timeToWarmupIdle` & `timeToOverheatLoad`: Cálculo automático da força gerada indicando o tempo (em minutos) exigidos de 20ºC até 85ºC.
+    *   `ambientHeatingModifier` & `ambientCoolingModifier`: Influência passiva do clima exterior nas peças de metal do motor.
+    *   `windCoolingMultiplier`: Ajuda aerodinâmica ao radiador ganhada pela deslocação do veículo (vento de arrasto).
+*   **`Group07 ao 10` (Danos e Avarias)**:
+    *   `enableColdRpmDamage` & `enableColdLoadDamage`: Punições e desgastes massivos por forçar os limites com óleo frio.
+    *   `thermostatFailChance`: A probabilidade (0.0 até 1.0) do termostato falhar fisicamente se a barra de vida nativa cruzar a percentagem do limite.
+*   **`Group 11 & 12` (Escalonamento Dinâmico)**: Equilibra o calor com base nos Cavalos do motor (tratores enormes dissipam melhor).
+*   **`Group 13` (Integrações Cruzadas)**: Lógica de compatibilidade com mods de Reprogramação como o *Adjustable Engine Power* (Chiptuning gera mais calor).
 
 ## 🤝 Integração Total
 Totalmente compatível não apenas com o Farming Simulator nativo 25 mas também testado para interligação orgânica com outros Mods Famosos de Modding, como o módulo de **Adjustable Engine Power**. Onde aumentos de 10% a 20% do Chip Tuning irão multiplicar permanentemente o calor desferido dentro do bloco do motor, sendo necessário ventoinhas maiores!
