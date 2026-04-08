@@ -26,11 +26,12 @@ Farming Simulator doesn't distinguish between engines, but RET does! The mod det
 ### 3. Smart Valves and Thermostats
 On a standard tractor (Water), the physics are controlled by a **Thermostat**. During the first minutes of the morning, it remains closed (0%) to retain heat in the cabin using a rich fuel injection (fast warmup). Upon reaching 85ºC, the valve dynamically opens in percentage to invoke the Central Radiator fans and halt the rise!
 
-### 4. Mechanical Damage and Stochastic Failures (Overheating Breakdowns)
-Is your tractor already showing significant wear on the repair screen? Get ready for the mechanical lottery!
-The **Thermostat Valve can break down while moving** in an aging tractor:
-*   **Stuck Open:** The tractor cannot maintain temperature and chronically runs cold (damaging cylinders under load).
-*   **Stuck Closed:** Flow to the radiator is cut off. The water boils, the cabin alarm sounds, and the engine will suffer immediate damage until you pull over!
+### 4. Advanced Damage System & Real Breakdowns
+Is your tractor already showing significant wear on the repair screen? Get ready for the mechanical lottery! This mod introduces two separate damage paradigms:
+*   **Advanced Normal Damage:** Speeds up the native game repair bar realistically if you push the redline while cold or boil the engine.
+*   **Real Breakdowns (Stochastic Failures):** The **Thermostat Valve can physically break down** in an aging tractor, immediately altering thermodynamic physics in real-time:
+    *   **Stuck Open:** The tractor cannot maintain temperature and chronically runs cold (damaging cylinders under load).
+    *   **Stuck Closed:** Flow to the radiator is cut off. The water boils, the cabin alarm sounds, and the engine will suffer immediate damage until you pull over!
 
 *(The severity and valve closure fluctuate percentage-wise with each percentage of vehicle damage).*
 
@@ -69,13 +70,30 @@ The system has memory per Tractor and synchronizes everything server-side for Mu
 
 ---
 
-## ⚙️ Uncompromised Customization
-Are you a Hard-Roleplay server creator or a Physics Master? The Mod will create the physical `modSettings/RealisticEngineTemp/` folder in your game documents as soon as you enter the first save.
-Inside the **`Config.xml`** file, you literally own the Laws of Physics. You can:
-- Change passive heating rates in Degrees per Millisecond.
-- Change at what Degree the valve enters alert mode and opens (e.g., from 85ºC to 95ºC).
-- Change the heating Quotient of all electric batteries on the map!
+## ⚙️ Uncompromised Customization & Config.xml Guide
+
+Are you a Hard-Roleplay server creator or a Physics Master? The Mod will create the physical `modSettings/RealisticEngineTemp/Config.xml` file in your game documents as soon as you enter the first save. Inside this file, you literally own the Laws of Physics.
+
 *(Whenever the mod version is updated, the system retains your XML numbers and cleanly introduces only the keys from new versions - You will never lose your calibration again).*
+
+### 📚 Main Configuration Variables Dictionary:
+*   **`Group00_Meta`**:
+    *   `enableMultiplayerSync`: (true/false) Syncs temperatures with players on dedicated servers.
+    *   `enableDataLogging`: (true/false) Exports real-time engine telemetry to a local `.csv` file.
+*   **`Group02_Debug_Master & Group04_HUD_Elements`**: Enables the HUD and configures which information fields (Valve, Tech data, Limits) are visible. `uiRefreshRateBaseMs` controls how fast the HUD text updates (default 500ms).
+*   **`Group05_General_Physics`**:
+    *   `globalSpeed`: Global physics speed multiplier.
+    *   `refAmbientTemp`: The default ambient temperature (e.g., 20.0) where calculations start stabilizing.
+    *   `warmupFastMultiplier`: Multiplier during cold starts (<60ºC) to simulate rich fuel mixture.
+*   **`Group06_Thermostat_Settings` (Water / Air / Electric)**:
+    *   `timeToWarmupIdle` & `timeToOverheatLoad`: Automates physics force. E.g., time needed to warm up from 20ºC to 85ºC in minutes.
+    *   `ambientHeatingModifier` & `ambientCoolingModifier`: Influence of real-time weather temperature on the engine block.
+    *   `windCoolingMultiplier`: Enhances radiator efficiency based on vehicle driving speed (natural wind drag).
+*   **`Group07 to 10` (Damages & Breakdowns)**:
+    *   `enableColdRpmDamage` & `enableColdLoadDamage`: Activates penalties for pushing cold engines. 
+    *   `thermostatFailChance`: The probabilistic chance (0.0 to 1.0) of a physical thermostat failure if the Native Damage bar crosses the `damageStartThreshold`.
+*   **`Group 11 & 12` (Dynamic Scaling)**: Automatically scales heating behavior based on engine horsepower and load effort (heavy tractors run natively cooler). 
+*   **`Group 13` (Integrations)**: Toggles integration features with other mods like *Adjustable Engine Power* (Chiptuning heat generation).
 
 ## 🤝 Full Integration
 Fully compatible not only with native Farming Simulator 25 but also tested for organic interconnection with other Famous Modding Mods, like the **Adjustable Engine Power** module. Where 10% to 20% increases from Chip Tuning will permanently multiply the unleashed heat inside the engine block, requiring larger fans!
