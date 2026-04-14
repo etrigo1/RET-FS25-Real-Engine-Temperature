@@ -1,7 +1,13 @@
 [🇵🇹 Ler em Português](README.pt.md) | 🇺🇸 English
 
 # 🚜 Realistic Engine Temperature (RET)
-**Current Version:** 7.0.x  |  **Farming Simulator 25**
+
+| | Version | Status |
+|:---:|:---|:---:|
+| 🟢 | **7.3.0** — Stable Release | ![Stable](https://img.shields.io/badge/Stable-7.3.0-brightgreen) |
+| 🧪 | **8.0.0** — Public Beta | ![Beta](https://img.shields.io/badge/Beta-8.0.0-orange) |
+
+**Farming Simulator 25**
 
 **Realistic Engine Temperature (RET)** is an advanced physics mod designed for Farming Simulator 25. It disables the native and utopian mechanical temperature of the base game, replacing it with a hyper-realistic thermodynamic model.
 
@@ -16,28 +22,40 @@ Heat doesn't rise linearly. It is calculated every millisecond based on:
 - **Engine Load:** Pulling a heavy plow uphill at 100% Load will generate extreme heat that pushes the mechanics to their limits.
 - **RPMs / Idle:** Engines left idling generate only base heat. Revving them to the Redline in neutral generates friction and heat.
 - **Weather and Wind:** Working on a cold rainy day decreases heat. Driving at 50 km/h generates natural wind cooling (Wind Cooling) that helps cool the engine regardless of the fan.
+- **DFCO (Deceleration Fuel Cut-Off):** When coasting downhill in gear without accelerating, the engine stops injecting fuel and generates no heat — just like a real engine.
 
-### 2. Three Distinct Engine Profiles (NEW in V7!)
+### 2. Three Distinct Engine Profiles
 Farming Simulator doesn't distinguish between engines, but RET does! The mod detects your tractor's consumption (Diesel, Methane, or Electric) and applies completely different physics:
 *   🟢 **Water-Cooled (Standard):** The classic block with antifreeze and a thermostat. Keeps the engine between 80ºC and 90ºC. Uses a dynamic temperature valve.
 *   💨 **Air-Cooled:** Ideal for classics (e.g., old Porsches). No thermal inertia! Cooling relies purely on the spinning of the engine-attached fan (RPMs). If you're doing very heavy PTO work with the tractor stationary, it will heat up dangerously fast!
 *   ⚡ **Electric Vehicles (EV / Batteries):** Ignores 100ºC boiling limits. Operate within a tight thermal protection profile (20ºC - 65ºC). They don't generate heat when stationary, functioning purely based on the extreme effort of current discharge. They feature a BTMS with its own heating if in the cold and electrified ventilation.
 
 ### 3. Smart Valves and Thermostats
-On a standard tractor (Water), the physics are controlled by a **Thermostat**. During the first minutes of the morning, it remains closed (0%) to retain heat in the cabin using a rich fuel injection (fast warmup). Upon reaching 85ºC, the valve dynamically opens in percentage to invoke the Central Radiator fans and halt the rise!
+On a standard tractor (Water), the physics are controlled by a **Thermostat**. During the first minutes of the morning, it remains closed (0%) to retain heat using a rich fuel injection (fast warmup). Upon reaching 85ºC, the valve dynamically opens in percentage to invoke the Central Radiator fans and halt the rise!
 
-### 4. Advanced Damage System & Real Breakdowns
-Is your tractor already showing significant wear on the repair screen? Get ready for the mechanical lottery! This mod introduces two separate damage paradigms:
-*   **Advanced Normal Damage:** Speeds up the native game repair bar realistically if you push the redline while cold or boil the engine.
-*   **Real Breakdowns (Stochastic Failures):** The **Thermostat Valve can physically break down** in an aging tractor, immediately altering thermodynamic physics in real-time:
-    *   **Stuck Open:** The tractor cannot maintain temperature and chronically runs cold (damaging cylinders under load).
-    *   **Stuck Closed:** Flow to the radiator is cut off. The water boils, the cabin alarm sounds, and the engine will suffer immediate damage until you pull over!
+### 4. Advanced Damage System & Real Breakdowns *(NEW in v8!)*
+RET introduces three separate layers of mechanical consequence:
 
-*(The severity and valve closure fluctuate percentage-wise with each percentage of vehicle damage).*
+**Layer 1 — Thermostat Valve Failure (Stochastic):**
+When your tractor accumulates enough wear (configurable, default 70%), a dice roll determines if the **thermostat valve physically breaks**:
+*   **Stuck Open:** The tractor cannot retain heat and chronically runs cold, damaging cylinders under load.
+*   **Stuck Closed:** Flow to the radiator is completely blocked. The water boils fast, the cabin alarm sounds, and the engine suffers immediate damage until you stop!
+
+Repairing the tractor at the workshop resets the failure state and gives the valve another chance.
+
+**Layer 2 — Overheating Stall:**
+If the engine temperature climbs **5ºC above the damage threshold** (default: above 115ºC), there is a growing random chance the engine will **stall itself** to prevent catastrophic failure. The hotter it gets, the higher the chance per second.
+
+**Layer 3 — Damage-Driven Stall & Start Lock *(NEW in v8!)***:
+The overall tractor condition now directly affects the engine's ability to run:
+*   **Between 80% and 95% damage:** The engine has a growing random chance of **stalling mid-work**. The closer to 95%, the higher the probability per second.
+*   **Above 95% damage:** The engine **cannot be started at all**. Take the tractor to the workshop before it's too late!
+
+*(All thresholds and probabilities are fully configurable in Config.xml).*
 
 ### 5. Cold Engine Stress Damage
 Don't just grab the tractor at 6 AM and start plowing straight away!
-The mod severely punishes the mechanics of tractors (and the repair wallet) that are pushed to the limit of RPMs or high Load levels while the temperature gauge is still in the cold zone! Warm up your tractor first!
+The mod severely punishes tractors pushed to the RPM limit or high Load levels while the temperature gauge is still cold. Warm up your tractor first!
 
 ### 6. Dirt Penalty (Radiator Sludge)
 Working in the mud all day coats the machinery's fins. As the Dirt meter increases in FS25, the maximum cooling power of your radiator plummets, making summer jobs impossible without stopping in the sun.
@@ -50,8 +68,9 @@ The Mod injects smooth and useful text into the corner of the screen for visual 
 - **HP and Adjustments:** The native horsepower recognized to generate heat (with active readings if you do Chiptuning at the Workshop!).
 - **Load / Average Load:** The constant balance of your effort (current % and the Average of the last minute of work).
 - **Valve:** Observe the exact percentage at which water transitions to the cooling panels.
+- **Dirt %:** Total radiator dirt level and the active cooling penalty it is applying.
 
-Additionally, RET hijacks the Native Warnings system (Farming Simulator's flashing screen banner) alerting you when forcing work on a cold engine or at the limit of Overheating.
+Additionally, RET hijacks the Native Warnings system (Farming Simulator's flashing screen banner) alerting you when forcing work on a cold engine or at the limit of Overheating. Battery overheat warnings are also fully localized in your game language.
 
 ---
 
@@ -90,10 +109,22 @@ Are you a Hard-Roleplay server creator or a Physics Master? The Mod will create 
     *   `ambientHeatingModifier` & `ambientCoolingModifier`: Influence of real-time weather temperature on the engine block.
     *   `windCoolingMultiplier`: Enhances radiator efficiency based on vehicle driving speed (natural wind drag).
 *   **`Group07 to 10` (Damages & Breakdowns)**:
-    *   `enableColdRpmDamage` & `enableColdLoadDamage`: Activates penalties for pushing cold engines. 
+    *   `enableColdRpmDamage` & `enableColdLoadDamage`: Activates penalties for pushing cold engines.
     *   `thermostatFailChance`: The probabilistic chance (0.0 to 1.0) of a physical thermostat failure if the Native Damage bar crosses the `damageStartThreshold`.
-*   **`Group 11 & 12` (Dynamic Scaling)**: Automatically scales heating behavior based on engine horsepower and load effort (heavy tractors run natively cooler). 
+    *   `enableOverheatStall`: (true/false) Allows the engine to stall from critical overheating (above damageStart + overheatStallStartDelta).
+    *   `enableDamageStall`: (true/false) Allows the engine to stall from excessive tractor wear.
+    *   `damageStallThreshold`: Damage level (0.0-1.0) at which engine stall risk begins (default: 0.80 = 80%).
+    *   `damageNoStartThreshold`: Damage level at which the engine refuses to start at all (default: 0.95 = 95%).
+*   **`Group 11 & 12` (Dynamic Scaling)**: Automatically scales heating behavior based on engine horsepower and load effort (heavy tractors run natively cooler).
 *   **`Group 13` (Integrations)**: Toggles integration features with other mods like *Adjustable Engine Power* (Chiptuning heat generation).
+
+---
+
+## 🌍 Language Support
+RET is fully localized in the following languages:
+🇬🇧 English | 🇵🇹 Portuguese | 🇩🇪 German | 🇫🇷 French | 🇪🇸 Spanish | 🇺🇦 Ukrainian
+
+---
 
 ## 🤝 Full Integration
 Fully compatible not only with native Farming Simulator 25 but also tested for organic interconnection with other Famous Modding Mods, like the **Adjustable Engine Power** module. Where 10% to 20% increases from Chip Tuning will permanently multiply the unleashed heat inside the engine block, requiring larger fans!
