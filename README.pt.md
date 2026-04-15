@@ -93,30 +93,130 @@ O sistema tem memória por Trator e sincroniza tudo do lado do Servidor com Mult
 
 És criador de servidores de Hard-Roleplay ou um Mestre da Física? O Mod vai criar o ficheiro `modSettings/RealisticEngineTemp/Config.xml` nos teus documentos de jogo mal entres na primeira gravação. Dentro dele tu és literalmente dono das Leis da Física.
 
-*(Sempre que a versão do mod for atualizada o sistema retém os teus números do XML e só introduz limpidamente as chaves das versões novas - Nunca mais perderás uma calibração tua)*.
+> **Sistema de Atualização Inteligente:** Sempre que a versão do mod for atualizada, o sistema retém os teus números do XML e só introduz limpidamente as chaves das versões novas. Nunca mais perderás uma calibração tua.
 
-### 📚 Dicionário das Principais Variáveis de Configuração:
-*   **`Group00_Meta`**:
-    *   `enableMultiplayerSync`: (true/false) Sincroniza as temperaturas com os restantes jogadores no servidor.
-    *   `enableDataLogging`: (true/false) Exporta telemetria do motor em tempo real para um ficheiro Excel (`.csv`).
-*   **`Group02_Debug_Master & Group04_HUD_Elements`**: Ativam a interface (HUD) e controlam que métricas são visíveis (Válvula, Dados Técnicos, Limites). O `uiRefreshRateBaseMs` dita a rapidez de atualização do texto.
-*   **`Group05_General_Physics`**:
-    *   `globalSpeed`: O multiplicador da velocidade das leis da física.
-    *   `refAmbientTemp`: O clima ambiente de referência (ex: 20.0ºC) onde o aquecimento começa a agir.
-    *   `warmupFastMultiplier`: Multiplicador durante arranques a frio (<60ºC) simulando injeção rica de combustível.
-*   **`Group06_Thermostat_Settings` (Água / Ar / Elétricos)**:
-    *   `timeToWarmupIdle` & `timeToOverheatLoad`: Cálculo automático da força gerada indicando o tempo (em minutos) exigidos de 20ºC até 85ºC.
-    *   `ambientHeatingModifier` & `ambientCoolingModifier`: Influência passiva do clima exterior nas peças de metal do motor.
-    *   `windCoolingMultiplier`: Ajuda aerodinâmica ao radiador ganhada pela deslocação do veículo (vento de arrasto).
-*   **`Group07 ao 10` (Danos e Avarias)**:
-    *   `enableColdRpmDamage` & `enableColdLoadDamage`: Punições e desgastes massivos por forçar os limites com óleo frio.
-    *   `thermostatFailChance`: A probabilidade (0.0 até 1.0) do termostato falhar fisicamente se a barra de vida nativa cruzar o limite.
-    *   `enableOverheatStall`: (true/false) Permite que o motor pare por sobreaquecimento crítico (acima de damageStart + overheatStallStartDelta).
-    *   `enableDamageStall`: (true/false) Permite que o motor pare ou falhe o arranque por desgaste excessivo.
-    *   `damageStallThreshold`: Nível de dano (0.0-1.0) a partir do qual começa o risco de paragem (padrão: 0.80 = 80%).
-    *   `damageNoStartThreshold`: Nível de dano a partir do qual o motor recusa arrancar (padrão: 0.95 = 95%).
-*   **`Group 11 & 12` (Escalonamento Dinâmico)**: Equilibra o calor com base nos Cavalos do motor (tratores enormes dissipam melhor).
-*   **`Group 13` (Integrações Cruzadas)**: Lógica de compatibilidade com mods de Reprogramação como o *Adjustable Engine Power* (Chiptuning gera mais calor).
+### 📚 Referência de Variáveis do Config.xml
+
+---
+
+#### 🌐 Geral & Multijogador
+
+| Variável | Tipo | Padrão | Descrição |
+| :--- | :---: | :---: | :--- |
+| `enableMultiplayerSync` | bool | `true` | Sincroniza as temperaturas do motor entre todos os jogadores no servidor. |
+| `enableDataLogging` | bool | `false` | Exporta telemetria do motor em tempo real para um ficheiro `.csv` (para análise em Excel). |
+| `logIntervalMs` | number | `1000` | Com que frequência (em ms) é guardada uma linha de telemetria no CSV. |
+
+---
+
+#### 🖥️ HUD & Debug
+
+| Variável | Tipo | Padrão | Descrição |
+| :--- | :---: | :---: | :--- |
+| `debugMode` | bool | `false` | Ativa o HUD de debug no ecrã com todos os valores de física em tempo real. |
+| `hud_ShowTitle` | bool | `true` | Mostra a barra de título do RET e o modo de multijogador. |
+| `hud_ShowTempRPM` | bool | `true` | Mostra a temperatura atual e as RPMs. |
+| `hud_ShowValve` | bool | `true` | Mostra a percentagem de abertura da válvula do termostato. |
+| `hud_ShowFlow` | bool | `true` | Mostra as taxas de geração e dissipação de calor (Gen/Pas/Rad). |
+| `hud_ShowEff` | bool | `true` | Mostra a carga do motor e a penalização por sujidade. |
+| `hud_ShowLimits` | bool | `true` | Mostra as RPM máximas seguras e os HP (com chiptuning se ativo). |
+| `uiRefreshRateBaseMs` | number | `500` | Intervalo de atualização do HUD em milissegundos (valor base/mestre). |
+
+---
+
+#### 🔥 Física Geral
+
+| Variável | Tipo | Padrão | Descrição |
+| :--- | :---: | :---: | :--- |
+| `globalSpeed` | number | `1.0` | Multiplicador global da velocidade de toda a física (1.0 = tempo real). |
+| `refAmbientTemp` | number | `20.0` | Temperatura ambiente de referência (ºC) usada em todos os cálculos. |
+| `minRpmForHeat` | number | `250` | RPM mínimas para o motor ser considerado "em funcionamento" e a gerar calor. |
+| `warmupFastMultiplier` | number | `2.0` | Multiplicador de calor no arranque a frio abaixo dos 60ºC (simula injeção rica). |
+| `autoCompensateWarmup` | bool | `true` | Ajusta automaticamente o calor base para que o tempo total de aquecimento seja respeitado mesmo com o multiplicador a frio ativo. |
+
+---
+
+#### 🌡️ Termostato (Motor Arrefecido a Água)
+
+| Variável | Tipo | Padrão | Descrição |
+| :--- | :---: | :---: | :--- |
+| `thermoStart` | number | `85.0` | Temperatura (ºC) a partir da qual a válvula começa a abrir. |
+| `thermoFull` | number | `90.0` | Temperatura (ºC) a partir da qual a válvula está completamente aberta. |
+| `timeToWarmupIdle` | number | `8.0` | Minutos para o motor aquecer do ambiente (20ºC) até `thermoStart` em ralenti. |
+| `timeToOverheatLoad` | number | `12.0` | Minutos para ir de `thermoFull` até `damageStart` a 100% de carga. |
+| `timeToCoolDown` | number | `120.0` | Minutos para o motor arrefecer de `thermoStart` até à temperatura ambiente. |
+| `damageStart` | number | `110.0` | Temperatura (ºC) a partir da qual o motor começa a sofrer dano. |
+| `ambientHeatingModifier` | number | `0.0` | Influência extra do clima no aquecimento por cada ºC acima da referência (0.0 = desligado). |
+| `ambientCoolingModifier` | number | `0.05` | Redução do arrefecimento por cada ºC acima da referência (0.05 = 5% por grau). |
+| `windCoolingMultiplier` | number | `0.02` | Eficiência extra do radiador por cada km/h de velocidade de deslocação (2% por km/h). |
+
+---
+
+#### ⚡ Veículos Elétricos (EV/Baterias)
+
+| Variável | Tipo | Padrão | Descrição |
+| :--- | :---: | :---: | :--- |
+| `ev_thermoStart` | number | `25.0` | Temperatura (ºC) a partir da qual o BTMS começa a arrefecer o pack de baterias. |
+| `ev_thermoFull` | number | `35.0` | Temperatura (ºC) em que o arrefecimento do BTMS está no máximo. |
+| `ev_optimalTemp` | number | `20.0` | Temperatura ideal das baterias. O BTMS aquece até este valor quando a frio. |
+| `ev_damageStart` | number | `65.0` | Temperatura (ºC) a partir da qual as baterias começam a sofrer dano. |
+
+---
+
+#### 💨 Motor Arrefecido a Ar
+
+| Variável | Tipo | Padrão | Descrição |
+| :--- | :---: | :---: | :--- |
+| `air_fanCoolingMultiplier` | number | `1.0` | Multiplicador da potência de arrefecimento pela ventoinha (escala com RPM + vento). |
+
+---
+
+#### 🔧 Dano por Motor Frio
+
+| Variável | Tipo | Padrão | Descrição |
+| :--- | :---: | :---: | :--- |
+| `enableColdRpmDamage` | bool | `true` | O motor sofre dano se as RPMs excederem o limite seguro com o motor frio. |
+| `enableColdLoadDamage` | bool | `true` | O motor sofre dano se a carga exceder o limite seguro com o motor frio. |
+| `coldDamageTempThreshold` | number | `60.0` | Temperatura (ºC) abaixo da qual as regras de dano a frio se aplicam. |
+| `maxColdDamagePerSec` | number | `0.01` | Dano máximo aplicado por segundo ao forçar com óleo frio. |
+| `limitRpmAtRef` | number | `0.60` | RPM máximas seguras como fração das RPM máximas à temperatura ambiente (60%). |
+| `limitLoadAtRef` | number | `0.50` | Fração de carga máxima segura com o motor frio (50%). |
+
+---
+
+#### 💥 Avaria do Termostato & Paragem por Sobreaquecimento
+
+| Variável | Tipo | Padrão | Descrição |
+| :--- | :---: | :---: | :--- |
+| `enableDamageEffects` | bool | `true` | Ativa o sistema de avaria física da válvula do termostato. |
+| `damageStartThreshold` | number | `0.70` | Nível de dano do trator (0–1) que despoleta o sorteio de avaria do termostato. |
+| `thermostatFailChance` | number | `0.50` | Probabilidade (0–1) de o termostato falhar fisicamente quando o dano cruza o limiar. |
+| `damageFullFailure` | number | `0.90` | Nível de dano em que a severidade da avaria atinge 100%. |
+| `enableOverheatStall` | bool | `true` | O motor pode parar se a temperatura exceder `damageStart` + delta. |
+| `overheatStallStartDelta` | number | `5.0` | Graus acima de `damageStart` antes de começar o risco de paragem (padrão: 115ºC). |
+| `overheatStallChancePerSec` | number | `0.015` | Probabilidade base de paragem por segundo em sobreaquecimento crítico (1.5%/s). |
+
+---
+
+#### 🚨 Paragem e Bloqueio de Arranque por Dano *(Novo na v8)*
+
+| Variável | Tipo | Padrão | Descrição |
+| :--- | :---: | :---: | :--- |
+| `enableDamageStall` | bool | `true` | O motor pode parar ou recusar arrancar com base no desgaste do trator. |
+| `damageStallThreshold` | number | `0.80` | Nível de dano (0–1) a partir do qual começa o risco de paragem aleatória (80%). |
+| `damageStallChancePerSec` | number | `0.010` | Probabilidade base de paragem por segundo entre 80% e 95% de dano (1%/s). |
+| `damageNoStartThreshold` | number | `0.95` | Nível de dano a partir do qual o motor **não consegue arrancar de todo** (95%). |
+
+---
+
+#### 🔗 Integrações com outros Mods
+
+| Variável | Tipo | Padrão | Descrição |
+| :--- | :---: | :---: | :--- |
+| `integ_AEP_Enabled` | bool | `true` | Ativa a integração com o mod *Adjustable Engine Power* (AEP). |
+| `integ_AEP_heatStage1` | number | `1.10` | Multiplicador de calor para o Stage 1 do AEP (chiptuning +10%). |
+| `integ_AEP_heatStage2` | number | `1.15` | Multiplicador de calor para o Stage 2 do AEP (chiptuning +15%). |
+| `integ_AEP_heatStage3` | number | `1.20` | Multiplicador de calor para o Stage 3 do AEP (chiptuning +20%). |
 
 ---
 
@@ -130,3 +230,4 @@ O RET está totalmente traduzido nos seguintes idiomas:
 Totalmente compatível não apenas com o Farming Simulator nativo 25 mas também testado para interligação orgânica com outros Mods Famosos de Modding, como o módulo de **Adjustable Engine Power**. Onde aumentos de 10% a 20% do Chip Tuning irão multiplicar permanentemente o calor desferido dentro do bloco do motor, sendo necessário ventoinhas maiores!
 
 Feito a pensar nos Roleplayers mais exigentes de agricultura. Desfruta!
+
