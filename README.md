@@ -93,30 +93,130 @@ The system has memory per Tractor and synchronizes everything server-side for Mu
 
 Are you a Hard-Roleplay server creator or a Physics Master? The Mod will create the physical `modSettings/RealisticEngineTemp/Config.xml` file in your game documents as soon as you enter the first save. Inside this file, you literally own the Laws of Physics.
 
-*(Whenever the mod version is updated, the system retains your XML numbers and cleanly introduces only the keys from new versions - You will never lose your calibration again).*
+> **Smart Upgrade System:** Whenever the mod version is updated, the system retains your XML numbers and cleanly introduces only the keys from new versions. You will never lose your calibration again.
 
-### 📚 Main Configuration Variables Dictionary:
-*   **`Group00_Meta`**:
-    *   `enableMultiplayerSync`: (true/false) Syncs temperatures with players on dedicated servers.
-    *   `enableDataLogging`: (true/false) Exports real-time engine telemetry to a local `.csv` file.
-*   **`Group02_Debug_Master & Group04_HUD_Elements`**: Enables the HUD and configures which information fields (Valve, Tech data, Limits) are visible. `uiRefreshRateBaseMs` controls how fast the HUD text updates (default 500ms).
-*   **`Group05_General_Physics`**:
-    *   `globalSpeed`: Global physics speed multiplier.
-    *   `refAmbientTemp`: The default ambient temperature (e.g., 20.0) where calculations start stabilizing.
-    *   `warmupFastMultiplier`: Multiplier during cold starts (<60ºC) to simulate rich fuel mixture.
-*   **`Group06_Thermostat_Settings` (Water / Air / Electric)**:
-    *   `timeToWarmupIdle` & `timeToOverheatLoad`: Automates physics force. E.g., time needed to warm up from 20ºC to 85ºC in minutes.
-    *   `ambientHeatingModifier` & `ambientCoolingModifier`: Influence of real-time weather temperature on the engine block.
-    *   `windCoolingMultiplier`: Enhances radiator efficiency based on vehicle driving speed (natural wind drag).
-*   **`Group07 to 10` (Damages & Breakdowns)**:
-    *   `enableColdRpmDamage` & `enableColdLoadDamage`: Activates penalties for pushing cold engines.
-    *   `thermostatFailChance`: The probabilistic chance (0.0 to 1.0) of a physical thermostat failure if the Native Damage bar crosses the `damageStartThreshold`.
-    *   `enableOverheatStall`: (true/false) Allows the engine to stall from critical overheating (above damageStart + overheatStallStartDelta).
-    *   `enableDamageStall`: (true/false) Allows the engine to stall from excessive tractor wear.
-    *   `damageStallThreshold`: Damage level (0.0-1.0) at which engine stall risk begins (default: 0.80 = 80%).
-    *   `damageNoStartThreshold`: Damage level at which the engine refuses to start at all (default: 0.95 = 95%).
-*   **`Group 11 & 12` (Dynamic Scaling)**: Automatically scales heating behavior based on engine horsepower and load effort (heavy tractors run natively cooler).
-*   **`Group 13` (Integrations)**: Toggles integration features with other mods like *Adjustable Engine Power* (Chiptuning heat generation).
+### 📚 Config.xml Variable Reference
+
+---
+
+#### 🌐 General & Multiplayer
+
+| Variable | Type | Default | Description |
+| :--- | :---: | :---: | :--- |
+| `enableMultiplayerSync` | bool | `true` | Syncs engine temperatures between all players on the server. |
+| `enableDataLogging` | bool | `false` | Exports real-time engine telemetry to a local `.csv` file (for analysis in Excel). |
+| `logIntervalMs` | number | `1000` | How often (in ms) a telemetry line is saved to the CSV. |
+
+---
+
+#### 🖥️ HUD & Debug
+
+| Variable | Type | Default | Description |
+| :--- | :---: | :---: | :--- |
+| `debugMode` | bool | `false` | Enables the on-screen debug HUD with all live physics values. |
+| `hud_ShowTitle` | bool | `true` | Shows the RET title bar and multiplayer mode on screen. |
+| `hud_ShowTempRPM` | bool | `true` | Shows the current temperature and RPM. |
+| `hud_ShowValve` | bool | `true` | Shows the thermostat valve opening percentage. |
+| `hud_ShowFlow` | bool | `true` | Shows heat generation and dissipation rates (Gen/Pas/Rad). |
+| `hud_ShowEff` | bool | `true` | Shows engine load and dirt penalty. |
+| `hud_ShowLimits` | bool | `true` | Shows safe max RPM and HP (with chiptuning if active). |
+| `uiRefreshRateBaseMs` | number | `500` | Master HUD refresh interval in milliseconds. |
+
+---
+
+#### 🔥 General Physics
+
+| Variable | Type | Default | Description |
+| :--- | :---: | :---: | :--- |
+| `globalSpeed` | number | `1.0` | Global multiplier for all physics speed (1.0 = real-time). |
+| `refAmbientTemp` | number | `20.0` | Reference ambient temperature (ºC) used in all calculations. |
+| `minRpmForHeat` | number | `250` | Minimum RPM for the engine to be considered "running" and generating heat. |
+| `warmupFastMultiplier` | number | `2.0` | Cold-start heat multiplier below 60ºC (simulates rich fuel injection). |
+| `autoCompensateWarmup` | bool | `true` | Automatically adjusts base heat so total warmup time is respected even with cold multiplier active. |
+
+---
+
+#### 🌡️ Thermostat (Water-Cooled Engine)
+
+| Variable | Type | Default | Description |
+| :--- | :---: | :---: | :--- |
+| `thermoStart` | number | `85.0` | Temperature (ºC) at which the thermostat valve starts opening. |
+| `thermoFull` | number | `90.0` | Temperature (ºC) at which the thermostat valve is fully open. |
+| `timeToWarmupIdle` | number | `8.0` | Minutes to warm up from ambient (20ºC) to `thermoStart` at idle. |
+| `timeToOverheatLoad` | number | `12.0` | Minutes to go from `thermoFull` to `damageStart` at 100% load. |
+| `timeToCoolDown` | number | `120.0` | Minutes for the engine to cool from `thermoStart` to ambient. |
+| `damageStart` | number | `110.0` | Temperature (ºC) at which the engine starts taking damage. |
+| `ambientHeatingModifier` | number | `0.0` | Extra heat influence per ºC of real weather above reference (0.0 = off). |
+| `ambientCoolingModifier` | number | `0.05` | Cooling slowdown per ºC of weather above reference (0.05 = 5% per degree). |
+| `windCoolingMultiplier` | number | `0.02` | Extra radiator efficiency per km/h of driving speed (2% per km/h). |
+
+---
+
+#### ⚡ Electric Vehicles (EV/Battery)
+
+| Variable | Type | Default | Description |
+| :--- | :---: | :---: | :--- |
+| `ev_thermoStart` | number | `25.0` | Temperature (ºC) at which the BTMS starts cooling the battery pack. |
+| `ev_thermoFull` | number | `35.0` | Temperature (ºC) at which the BTMS cooling is at maximum. |
+| `ev_optimalTemp` | number | `20.0` | Ideal battery temperature. The BTMS heats up to this when cold. |
+| `ev_damageStart` | number | `65.0` | Temperature (ºC) at which the batteries start taking damage. |
+
+---
+
+#### 💨 Air-Cooled Engine
+
+| Variable | Type | Default | Description |
+| :--- | :---: | :---: | :--- |
+| `air_fanCoolingMultiplier` | number | `1.0` | Multiplier for fan-driven cooling power (scales with RPM + wind). |
+
+---
+
+#### 🔧 Cold Engine Damage
+
+| Variable | Type | Default | Description |
+| :--- | :---: | :---: | :--- |
+| `enableColdRpmDamage` | bool | `true` | Engine takes damage if RPMs exceed the safe limit while cold. |
+| `enableColdLoadDamage` | bool | `true` | Engine takes damage if load exceeds the safe limit while cold. |
+| `coldDamageTempThreshold` | number | `60.0` | Temperature (ºC) below which cold damage rules apply. |
+| `maxColdDamagePerSec` | number | `0.01` | Max damage applied per second while running cold at limit. |
+| `limitRpmAtRef` | number | `0.60` | Max safe RPM as a fraction of max RPM when at ambient temp (60%). |
+| `limitLoadAtRef` | number | `0.50` | Max safe load fraction when engine is cold (50%). |
+
+---
+
+#### 💥 Thermostat Failure & Overheating Stall
+
+| Variable | Type | Default | Description |
+| :--- | :---: | :---: | :--- |
+| `enableDamageEffects` | bool | `true` | Enables the thermostat valve failure system. |
+| `damageStartThreshold` | number | `0.70` | Tractor damage level (0–1) that triggers the thermostat failure roll. |
+| `thermostatFailChance` | number | `0.50` | Probability (0–1) that the thermostat physically fails when damage crosses the threshold. |
+| `damageFullFailure` | number | `0.90` | Damage level at which thermostat failure severity reaches 100%. |
+| `enableOverheatStall` | bool | `true` | Engine can stall if temperature exceeds `damageStart` + delta. |
+| `overheatStallStartDelta` | number | `5.0` | Degrees above `damageStart` before stall risk begins (default: 115ºC). |
+| `overheatStallChancePerSec` | number | `0.015` | Base chance per second of stalling when critically overheated (1.5%/s). |
+
+---
+
+#### 🚨 Damage-Driven Stall & Start Lock *(New in v8)*
+
+| Variable | Type | Default | Description |
+| :--- | :---: | :---: | :--- |
+| `enableDamageStall` | bool | `true` | Engine can stall or refuse to start based on tractor wear level. |
+| `damageStallThreshold` | number | `0.80` | Damage level (0–1) at which random mid-work stalling begins (80%). |
+| `damageStallChancePerSec` | number | `0.010` | Base stall chance per second between 80% and 95% damage (1%/s). |
+| `damageNoStartThreshold` | number | `0.95` | Damage level at which the engine **cannot be started at all** (95%). |
+
+---
+
+#### 🔗 Mod Integrations
+
+| Variable | Type | Default | Description |
+| :--- | :---: | :---: | :--- |
+| `integ_AEP_Enabled` | bool | `true` | Enables integration with the *Adjustable Engine Power* (AEP) mod. |
+| `integ_AEP_heatStage1` | number | `1.10` | Heat multiplier for AEP Stage 1 chiptuning (+10%). |
+| `integ_AEP_heatStage2` | number | `1.15` | Heat multiplier for AEP Stage 2 chiptuning (+15%). |
+| `integ_AEP_heatStage3` | number | `1.20` | Heat multiplier for AEP Stage 3 chiptuning (+20%). |
 
 ---
 
@@ -130,3 +230,4 @@ RET is fully localized in the following languages:
 Fully compatible not only with native Farming Simulator 25 but also tested for organic interconnection with other Famous Modding Mods, like the **Adjustable Engine Power** module. Where 10% to 20% increases from Chip Tuning will permanently multiply the unleashed heat inside the engine block, requiring larger fans!
 
 Crafted with the most demanding farming Roleplayers in mind. Enjoy!
+
