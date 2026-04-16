@@ -5,7 +5,7 @@
 | | Version | Status |
 |:---:|:---|:---:|
 | 🟢 | **7.3.0** — Stable Release | ![Stable](https://img.shields.io/badge/Stable-7.3.0-brightgreen) |
-| 🧪 | **8.0.0** — Public Beta | ![Beta](https://img.shields.io/badge/Beta-8.0.0-orange) |
+| 🧪 | **8.1.0** — Public Beta | ![Beta](https://img.shields.io/badge/Beta-8.1.0-orange) |
 
 **Farming Simulator 25**
 
@@ -24,11 +24,13 @@ Heat doesn't rise linearly. It is calculated every millisecond based on:
 - **Weather and Wind:** Working on a cold rainy day decreases heat. Driving at 50 km/h generates natural wind cooling (Wind Cooling) that helps cool the engine regardless of the fan.
 - **DFCO (Deceleration Fuel Cut-Off):** When coasting downhill in gear without accelerating, the engine stops injecting fuel and generates no heat — just like a real engine.
 
-### 2. Three Distinct Engine Profiles
-Farming Simulator doesn't distinguish between engines, but RET does! The mod detects your tractor's consumption (Diesel, Methane, or Electric) and applies completely different physics:
+### 2. Five Vehicle Profiles
+Farming Simulator doesn't distinguish between engines, but RET does! The mod detects your vehicle's consumption (Diesel, Methane, or Electric) and applies completely different physics. You can also override the detected profile at any time with a console command:
 *   🟢 **Water-Cooled (Standard):** The classic block with antifreeze and a thermostat. Keeps the engine between 80ºC and 90ºC. Uses a dynamic temperature valve.
 *   💨 **Air-Cooled:** Ideal for classics (e.g., old Porsches). No thermal inertia! Cooling relies purely on the spinning of the engine-attached fan (RPMs). If you're doing very heavy PTO work with the tractor stationary, it will heat up dangerously fast!
 *   ⚡ **Electric Vehicles (EV / Batteries):** Ignores 100ºC boiling limits. Operate within a tight thermal protection profile (20ºC - 65ºC). They don't generate heat when stationary, functioning purely based on the extreme effort of current discharge. They feature a BTMS with its own heating if in the cold and electrified ventilation.
+*   🚗 **Car (Light Vehicle) *(NEW in v8.1!)***:  Modern passenger cars warm up much faster (~2 min to 80ºC). The thermostat valve opens between 80ºC and 87ºC. Cooling is purely wind-driven while moving (no fan), and an **independent electric fan** activates only when temperature reaches 95ºC. All cold and overheating damage rules apply equally.
+*   🚫 **No-RET *(NEW in v8.1!)***:  Completely removes a specific vehicle from RET's simulation. The game's native temperature takes over. Only the RET title bar is shown in grey when debug mode is active.
 
 ### 3. Smart Valves and Thermostats
 On a standard tractor (Water), the physics are controlled by a **Thermostat**. During the first minutes of the morning, it remains closed (0%) to retain heat using a rich fuel injection (fast warmup). Upon reaching 85ºC, the valve dynamically opens in percentage to invoke the Central Radiator fans and halt the rise!
@@ -62,13 +64,15 @@ Working in the mud all day coats the machinery's fins. As the Dirt meter increas
 
 ---
 
-## 🖥️ The Interface (Dynamic HUD)
-The Mod injects smooth and useful text into the corner of the screen for visual monitoring (only when the engine is running):
+## 🖥️ The Interface (Adaptive HUD)
+The Mod injects smooth and useful text into the corner of the screen for visual monitoring (only when the engine is running). The HUD adapts automatically to the vehicle profile:
 - **Safe Max RPM:** Shows if you can push the throttle. Turns Red if you're hurting it!
 - **HP and Adjustments:** The native horsepower recognized to generate heat (with active readings if you do Chiptuning at the Workshop!).
 - **Load / Average Load:** The constant balance of your effort (current % and the Average of the last minute of work).
 - **Valve:** Observe the exact percentage at which water transitions to the cooling panels.
+- **Fan *(Car only)*:** Shows the electric fan status — `Fan: OFF` (blue) when temperature is below 95ºC, `Fan: ON (70%)` (green) when the fan is actively cooling.
 - **Dirt %:** Total radiator dirt level and the active cooling penalty it is applying.
+- **No-RET vehicles:** Only the title bar is shown in grey, indicating the vehicle is excluded from simulation.
 
 Additionally, RET hijacks the Native Warnings system (Farming Simulator's flashing screen banner) alerting you when forcing work on a cold engine or at the limit of Overheating. Battery overheat warnings are also fully localized in your game language.
 
@@ -81,9 +85,11 @@ The system has memory per Tractor and synchronizes everything server-side for Mu
 | :--- | :--- |
 | `ret help` | Shows the help panel and all shortcuts. |
 | `ret on` / `ret off` | Fully enables or disables the mod in the current save game. |
-| `ret water` | Forces the tractor you are currently sitting in to use a Water-Cooled engine (Standard). |
-| `ret air` | Forces the current tractor to ignore thermostats and be Air-Cooled. |
-| `ret electric` | Forces the current tractor to use a tight Lithium thermal curve (EV Batteries). |
+| `ret water` | Forces the vehicle you are sitting in to use a Water-Cooled engine (Standard). |
+| `ret air` | Forces the current vehicle to ignore thermostats and be Air-Cooled. |
+| `ret electric` | Forces the current vehicle to use a tight Lithium thermal curve (EV Batteries). |
+| `ret car` | Forces the current vehicle to use the **Car profile** (thermostat + electric fan). *(New in v8.1)* |
+| `ret noret` | **Excludes** the current vehicle from RET entirely. Native temperature takes over. *(New in v8.1)* |
 | `ret debug true` | Activates developer mode, spitting out the raw math of visual heat loss and absorption equations (+ and -) under the menu. |
 | `ret load` / `ret save` | Instantly reads or forces saving of data to the XML file. |
 
@@ -120,6 +126,7 @@ Are you a Hard-Roleplay server creator or a Physics Master? The Mod will create 
 | `hud_ShowFlow` | bool | `true` | Shows heat generation and dissipation rates (Gen/Pas/Rad). |
 | `hud_ShowEff` | bool | `true` | Shows engine load and dirt penalty. |
 | `hud_ShowLimits` | bool | `true` | Shows safe max RPM and HP (with chiptuning if active). |
+| `hud_ShowFan` | bool | `true` | Shows the electric fan status line (Car profile only). |
 | `uiRefreshRateBaseMs` | number | `500` | Master HUD refresh interval in milliseconds. |
 
 ---
@@ -168,6 +175,19 @@ Are you a Hard-Roleplay server creator or a Physics Master? The Mod will create 
 | Variable | Type | Default | Description |
 | :--- | :---: | :---: | :--- |
 | `air_fanCoolingMultiplier` | number | `1.0` | Multiplier for fan-driven cooling power (scales with RPM + wind). |
+
+---
+
+#### 🚗 Car Profile *(New in v8.1)*
+
+| Variable | Type | Default | Description |
+| :--- | :---: | :---: | :--- |
+| `car_thermoStart` | number | `80.0` | Temperature (ºC) at which the car thermostat starts opening. |
+| `car_thermoFull` | number | `87.0` | Temperature (ºC) at which the car thermostat is fully open. |
+| `car_warmupTime` | number | `2.0` | Minutes to warm up from ambient temperature to `car_thermoStart`. |
+| `car_windCoolingMultiplier` | number | `0.05` | Cooling gain per km/h while driving (radiator wind effect). |
+| `car_fanOnTemp` | number | `95.0` | Temperature (ºC) at which the electric fan activates (independent of the valve). |
+| `car_fanPower` | number | `0.70` | Electric fan cooling power as a fraction of `cooling_power_max` (70%). |
 
 ---
 
