@@ -1,233 +1,253 @@
-[🇺🇸 Read in English](README.md) | 🇵🇹 Português
+[🇵🇹 Ler em Português](README.pt.md) | 🇺🇸 English
 
 # 🚜 Realistic Engine Temperature (RET)
 
-| | Versão | Estado |
+| | Version | Status |
 |:---:|:---|:---:|
-| 🟢 | **7.3.0** — Versão Estável | ![Stable](https://img.shields.io/badge/Estavel-7.3.0-brightgreen) |
-| 🧪 | **8.0.0** — Beta Público | ![Beta](https://img.shields.io/badge/Beta-8.0.0-orange) |
+| 🟢 | **7.3.0** — Stable Release | ![Stable](https://img.shields.io/badge/Stable-7.3.0-brightgreen) |
+| 🧪 | **8.1.0** — Public Beta | ![Beta](https://img.shields.io/badge/Beta-8.1.0-orange) |
 
 **Farming Simulator 25**
 
-O **Realistic Engine Temperature (RET)** é um mod de física avançada concebido para o Farming Simulator 25. Ele desativa a temperatura mecânica nativa e utópica do jogo base, substituíndo-a por um modelo termodinâmico hiper-realista.
+**Realistic Engine Temperature (RET)** is an advanced physics mod designed for Farming Simulator 25. It disables the native and utopian mechanical temperature of the base game, replacing it with a hyper-realistic thermodynamic model.
 
-Quer tenhas um velho trator a gasóleo, uma ceifeira antiga arrefecida a ar ou um modelo elétrico topo de gama, o RET simulará exatamente como o calor é gerado, dissipado e as potenciais avarias no meio do processo!
-
----
-
-## 🌟 Principais Funcionalidades
-
-### 1. Sistema Termodinâmico Ativo
-O calor não sobe de forma linear. Ele é calculado a cada milissegundo baseado em:
-- **Carga do Motor (Load):** Puxar um arado pesado numa subida a 100% de Esforço vai gerar um calor extremo que leva a mecânica ao seu limite.
-- **RPMs / Ralenti:** Motores deixados ao ralenti geram apenas calor base. Levá-los ao Redline em ponto morto gera fricção e calor.
-- **Clima e Vento:** Trabalhar num dia chuvoso e frio diminui o calor. Conduzir a 50 km/h gera um fluxo de arrasto natural (Wind Cooling) que ajuda a arrefecer independentemente da ventoinha.
-- **DFCO (Corte de Injeção por Desaceleração):** Quando o trator desce engatado sem acelerar, o motor corta a injeção de combustível e deixa de gerar calor — exatamente como um motor real.
-
-### 2. Três Perfis Distintos de Motorização
-O Farming Simulator não faz distinção dos motores, mas o RET faz! O mod deteta o consumo do teu trator (Diesel, Metano ou Elétrico) e aplica físicas completamente diferentes:
-*   🟢 **Arrefecimento a Água (Padrão):** O clássico bloco com anticongelante e termostato. Mantém o motor nos 80ºC a 90ºC. Usa válvula de temperatura dinâmica.
-*   💨 **Arrefecimento a Ar (Air-Cooled):** Ideal para clássicos (Ex: Porsches antigos). Sem Inércia térmica! A refrigeração depende puramente do rodar da ventoinha acoplada ao motor (RPMs). Se estiveres a fazer trabalho de TDF muito pesado com o trator estacionário, ele vai aquecer perigosamente rápido!
-*   ⚡ **Veículos Elétricos (EV / Baterias):** Ignoram ferveduras de 100ºC. Funcionam num perfil apertado de proteção térmica (20ºC - 65ºC). Parados não geram calor, funcionam puramente pelo esforço extremo de descarga da corrente. Têm um BTMS com aquecimento próprio se estiverem ao frio e ventilação eletrificada.
-
-### 3. Válvulas e Termostatos Inteligentes
-No trator padrão (Água), a física é controlada por um **Termostato**. Durante os primeiros minutos da manhã ele está fechado (0%) a reter calor usando injeção rica de combustível (fast warmup). Ao pisar os 85ºC a válvula abre dinamicamente em percentagem para invocar as ventoinhas do Radiador Central e travar a subida!
-
-### 4. Sistema de Danos Avançado e Avarias Físicas Reais *(NOVO na v8!)*
-O RET introduz três camadas independentes de consequências mecânicas:
-
-**Camada 1 — Avaria da Válvula do Termostato (Estocástica):**
-Quando o teu trator acumula desgaste suficiente (configurável, padrão 70%), um sorteio determina se a **válvula do termostato encrava fisicamente**:
-*   **Encravar Aberta:** O trator não consegue reter calor e trabalha cronicamente a frio, danificando os cilindros sob carga.
-*   **Encravar Fechada:** O fluxo para o radiador fica completamente bloqueado. A água ferve rapidamente, o alarme da cabine soa e o motor sofre dano imediato até parar!
-
-Reparar o trator na oficina repõe o estado da válvula e dá-lhe uma nova hipótese.
-
-**Camada 2 — Paragem por Sobreaquecimento Crítico:**
-Se a temperatura do motor subir **5ºC acima do limiar de dano** (padrão: acima de 115ºC), existe uma probabilidade aleatória crescente de o motor **se parar a si próprio** para evitar uma falha catastrófica. Quanto mais quente estiver, maior a probabilidade por segundo.
-
-**Camada 3 — Paragem e Bloqueio de Arranque por Dano *(NOVO na v8!)***:
-O estado geral do trator afeta agora diretamente a capacidade do motor de funcionar:
-*   **Entre 80% e 95% de dano:** O motor tem uma probabilidade aleatória crescente de **parar no meio do trabalho**. Quanto mais próximo de 95%, maior a probabilidade por segundo.
-*   **Acima de 95% de dano:** O motor **não consegue arrancar de todo**. Leva o trator à oficina antes que seja tarde demais!
-
-*(Todos os limiares e probabilidades são totalmente configuráveis no Config.xml).*
-
-### 5. Dano por Esforço a Frio
-Não pegues no trator às 6h da manhã e comeces a lavrar a direito!
-O mod pune severamente tratores levados ao limite de RPMs ou a altos níveis de Carga quando o medidor da temperatura ainda está a frio. Aquece o teu trator primeiro!
-
-### 6. Penalização por Sujidade (Lodo no Radiador)
-Trabalhar na lama o dia todo cobre os favos do maquinário. À medida que o medidor de Sujidade aumenta no FS25, a força máxima de refrigeração do seu radiador cai a pique, tornando os trabalhos de verão impossíveis sem parar ao sol.
+Whether you have an old diesel tractor, a vintage air-cooled harvester, or a top-of-the-line electric model, RET will simulate exactly how heat is generated, dissipated, and the potential breakdowns in the middle of the process!
 
 ---
 
-## 🖥️ A Interface (HUD Dinâmico)
-O Mod injeta texto suave e útil no canto do ecrã para monitorização a olho (apenas quando o motor está ligado):
-- **RPM Max Seguras:** Mostra se já podes puxar pelo acelerador. Fica a Vermelho se o estiveres a prejudicar!
-- **HP e Ajustamentos:** A cavalagem nativa reconhecida a debitar calor (com leituras ativas caso faças reprogramação (Chiptuning) na Oficina!).
-- **Load / Carga Média:** A balança constante do teu esforço (% atual e a Média do último minuto de trabalho).
-- **Válvula:** Observa a percentagem exata com que a água transita para os painéis refrigeradores.
-- **Sujidade %:** Nível total de sujidade do radiador e a penalização de arrefecimento ativa.
+## 🌟 Main Features
 
-Além disto, o RET apropria-se do sistema de Avisos Nativos (Banner intermitente do ecrã do Farming Simulator) alertando-o de quando forçar trabalho a frio ou no limite do Sobreaquecimento. Os avisos de sobreaquecimento de baterias (EV) são também traduzidos na tua língua de jogo.
+### 1. Active Thermodynamic System
+Heat doesn't rise linearly. It is calculated every millisecond based on:
+- **Engine Load:** Pulling a heavy plow uphill at 100% Load will generate extreme heat that pushes the mechanics to their limits.
+- **RPMs / Idle:** Engines left idling generate only base heat. Revving them to the Redline in neutral generates friction and heat.
+- **Weather and Wind:** Working on a cold rainy day decreases heat. Driving at 50 km/h generates natural wind cooling (Wind Cooling) that helps cool the engine regardless of the fan.
+- **DFCO (Deceleration Fuel Cut-Off):** When coasting downhill in gear without accelerating, the engine stops injecting fuel and generates no heat — just like a real engine.
+
+### 2. Five Vehicle Profiles
+Farming Simulator doesn't distinguish between engines, but RET does! The mod detects your vehicle's consumption (Diesel, Methane, or Electric) and applies completely different physics. You can also override the detected profile at any time with a console command:
+*   🟢 **Water-Cooled (Standard):** The classic block with antifreeze and a thermostat. Keeps the engine between 80ºC and 90ºC. Uses a dynamic temperature valve.
+*   💨 **Air-Cooled:** Ideal for classics (e.g., old Porsches). No thermal inertia! Cooling relies purely on the spinning of the engine-attached fan (RPMs). If you're doing very heavy PTO work with the tractor stationary, it will heat up dangerously fast!
+*   ⚡ **Electric Vehicles (EV / Batteries):** Ignores 100ºC boiling limits. Operate within a tight thermal protection profile (20ºC - 65ºC). They don't generate heat when stationary, functioning purely based on the extreme effort of current discharge. They feature a BTMS with its own heating if in the cold and electrified ventilation.
+*   🚗 **Car (Light Vehicle) *(NEW in v8.1!)***:  Modern passenger cars warm up much faster (~2 min to 80ºC). The thermostat valve opens between 80ºC and 87ºC. Cooling is purely wind-driven while moving (no fan), and an **independent electric fan** activates only when temperature reaches 95ºC. All cold and overheating damage rules apply equally.
+*   🚫 **No-RET *(NEW in v8.1!)***:  Completely removes a specific vehicle from RET's simulation. The game's native temperature takes over. Only the RET title bar is shown in grey when debug mode is active.
+
+### 3. Smart Valves and Thermostats
+On a standard tractor (Water), the physics are controlled by a **Thermostat**. During the first minutes of the morning, it remains closed (0%) to retain heat using a rich fuel injection (fast warmup). Upon reaching 85ºC, the valve dynamically opens in percentage to invoke the Central Radiator fans and halt the rise!
+
+### 4. Advanced Damage System & Real Breakdowns *(NEW in v8!)*
+RET introduces three separate layers of mechanical consequence:
+
+**Layer 1 — Thermostat Valve Failure (Stochastic):**
+When your tractor accumulates enough wear (configurable, default 70%), a dice roll determines if the **thermostat valve physically breaks**:
+*   **Stuck Open:** The tractor cannot retain heat and chronically runs cold, damaging cylinders under load.
+*   **Stuck Closed:** Flow to the radiator is completely blocked. The water boils fast, the cabin alarm sounds, and the engine suffers immediate damage until you stop!
+
+Repairing the tractor at the workshop resets the failure state and gives the valve another chance.
+
+**Layer 2 — Overheating Stall:**
+If the engine temperature climbs **5ºC above the damage threshold** (default: above 115ºC), there is a growing random chance the engine will **stall itself** to prevent catastrophic failure. The hotter it gets, the higher the chance per second.
+
+**Layer 3 — Damage-Driven Stall & Start Lock *(NEW in v8!)***:
+The overall tractor condition now directly affects the engine's ability to run:
+*   **Between 80% and 95% damage:** The engine has a growing random chance of **stalling mid-work**. The closer to 95%, the higher the probability per second.
+*   **Above 95% damage:** The engine **cannot be started at all**. Take the tractor to the workshop before it's too late!
+
+*(All thresholds and probabilities are fully configurable in Config.xml).*
+
+### 5. Cold Engine Stress Damage
+Don't just grab the tractor at 6 AM and start plowing straight away!
+The mod severely punishes tractors pushed to the RPM limit or high Load levels while the temperature gauge is still cold. Warm up your tractor first!
+
+### 6. Dirt Penalty (Radiator Sludge)
+Working in the mud all day coats the machinery's fins. As the Dirt meter increases in FS25, the maximum cooling power of your radiator plummets, making summer jobs impossible without stopping in the sun.
 
 ---
 
-## 🛠️ Comandos de Consola (Para Utilizadores Avançados)
-O sistema tem memória por Trator e sincroniza tudo do lado do Servidor com Multijogador! Podes abrir a consola do jogo com a tecla `~` / `'` e utilizar os atalhos abaixo escrevendo `ret <comando>`:
+## 🖥️ The Interface (Adaptive HUD)
+The Mod injects smooth and useful text into the corner of the screen for visual monitoring (only when the engine is running). The HUD adapts automatically to the vehicle profile:
+- **Safe Max RPM:** Shows if you can push the throttle. Turns Red if you're hurting it!
+- **HP and Adjustments:** The native horsepower recognized to generate heat (with active readings if you do Chiptuning at the Workshop!).
+- **Load / Average Load:** The constant balance of your effort (current % and the Average of the last minute of work).
+- **Valve:** Observe the exact percentage at which water transitions to the cooling panels.
+- **Fan *(Car only)*:** Shows the electric fan status — `Fan: OFF` (blue) when temperature is below 95ºC, `Fan: ON (70%)` (green) when the fan is actively cooling.
+- **Dirt %:** Total radiator dirt level and the active cooling penalty it is applying.
+- **No-RET vehicles:** Only the title bar is shown in grey, indicating the vehicle is excluded from simulation.
 
-| Comando | Ação |
+Additionally, RET hijacks the Native Warnings system (Farming Simulator's flashing screen banner) alerting you when forcing work on a cold engine or at the limit of Overheating. Battery overheat warnings are also fully localized in your game language.
+
+---
+
+## 🛠️ Console Commands (For Advanced Users)
+The system has memory per Tractor and synchronizes everything server-side for Multiplayer! You can open the game console with the `~` / `'` key and use the shortcuts below by typing `ret <command>`:
+
+| Command | Action |
 | :--- | :--- |
-| `ret help` | Mostra o painel de ajuda e todos os atalhos. |
-| `ret on` / `ret off` | Liga ou desliga o mod totalmente no save game atual. |
-| `ret water` | Força o trator atual em que te sentas a usar motor Arrefecido a Água (Padrão). |
-| `ret air` | Força o trator atual a ignorar termostatos e a ser Arrefecido a Ar. |
-| `ret electric` | Força o trator atual a usar curva térmica apertada de Lítio (Baterias EV). |
-| `ret debug true` | Ativa o modo desenvolvedor cospindo na matemática crua das equações visuais de perda e absorção (+ e -) sob o menu. |
-| `ret load` / `ret save` | Lê ou Força gravação dos dados no ficheiro XML de modo instantâneo. |
+| `ret help` | Shows the help panel and all shortcuts. |
+| `ret on` / `ret off` | Fully enables or disables the mod in the current save game. |
+| `ret water` | Forces the vehicle you are sitting in to use a Water-Cooled engine (Standard). |
+| `ret air` | Forces the current vehicle to ignore thermostats and be Air-Cooled. |
+| `ret electric` | Forces the current vehicle to use a tight Lithium thermal curve (EV Batteries). |
+| `ret car` | Forces the current vehicle to use the **Car profile** (thermostat + electric fan). *(New in v8.1)* |
+| `ret noret` | **Excludes** the current vehicle from RET entirely. Native temperature takes over. *(New in v8.1)* |
+| `ret debug true` | Activates developer mode, spitting out the raw math of visual heat loss and absorption equations (+ and -) under the menu. |
+| `ret load` / `ret save` | Instantly reads or forces saving of data to the XML file. |
 
 ---
 
-## ⚙️ Personalização Descomprometida e Guia do Config.xml
+## ⚙️ Uncompromised Customization & Config.xml Guide
 
-És criador de servidores de Hard-Roleplay ou um Mestre da Física? O Mod vai criar o ficheiro `modSettings/RealisticEngineTemp/Config.xml` nos teus documentos de jogo mal entres na primeira gravação. Dentro dele tu és literalmente dono das Leis da Física.
+Are you a Hard-Roleplay server creator or a Physics Master? The Mod will create the physical `modSettings/RealisticEngineTemp/Config.xml` file in your game documents as soon as you enter the first save. Inside this file, you literally own the Laws of Physics.
 
-> **Sistema de Atualização Inteligente:** Sempre que a versão do mod for atualizada, o sistema retém os teus números do XML e só introduz limpidamente as chaves das versões novas. Nunca mais perderás uma calibração tua.
+> **Smart Upgrade System:** Whenever the mod version is updated, the system retains your XML numbers and cleanly introduces only the keys from new versions. You will never lose your calibration again.
 
-### 📚 Referência de Variáveis do Config.xml
+### 📚 Config.xml Variable Reference
 
 ---
 
-#### 🌐 Geral & Multijogador
+#### 🌐 General & Multiplayer
 
-| Variável | Tipo | Padrão | Descrição |
+| Variable | Type | Default | Description |
 | :--- | :---: | :---: | :--- |
-| `enableMultiplayerSync` | bool | `true` | Sincroniza as temperaturas do motor entre todos os jogadores no servidor. |
-| `enableDataLogging` | bool | `false` | Exporta telemetria do motor em tempo real para um ficheiro `.csv` (para análise em Excel). |
-| `logIntervalMs` | number | `1000` | Com que frequência (em ms) é guardada uma linha de telemetria no CSV. |
+| `enableMultiplayerSync` | bool | `true` | Syncs engine temperatures between all players on the server. |
+| `enableDataLogging` | bool | `false` | Exports real-time engine telemetry to a local `.csv` file (for analysis in Excel). |
+| `logIntervalMs` | number | `1000` | How often (in ms) a telemetry line is saved to the CSV. |
 
 ---
 
 #### 🖥️ HUD & Debug
 
-| Variável | Tipo | Padrão | Descrição |
+| Variable | Type | Default | Description |
 | :--- | :---: | :---: | :--- |
-| `debugMode` | bool | `false` | Ativa o HUD de debug no ecrã com todos os valores de física em tempo real. |
-| `hud_ShowTitle` | bool | `true` | Mostra a barra de título do RET e o modo de multijogador. |
-| `hud_ShowTempRPM` | bool | `true` | Mostra a temperatura atual e as RPMs. |
-| `hud_ShowValve` | bool | `true` | Mostra a percentagem de abertura da válvula do termostato. |
-| `hud_ShowFlow` | bool | `true` | Mostra as taxas de geração e dissipação de calor (Gen/Pas/Rad). |
-| `hud_ShowEff` | bool | `true` | Mostra a carga do motor e a penalização por sujidade. |
-| `hud_ShowLimits` | bool | `true` | Mostra as RPM máximas seguras e os HP (com chiptuning se ativo). |
-| `uiRefreshRateBaseMs` | number | `500` | Intervalo de atualização do HUD em milissegundos (valor base/mestre). |
+| `debugMode` | bool | `false` | Enables the on-screen debug HUD with all live physics values. |
+| `hud_ShowTitle` | bool | `true` | Shows the RET title bar and multiplayer mode on screen. |
+| `hud_ShowTempRPM` | bool | `true` | Shows the current temperature and RPM. |
+| `hud_ShowValve` | bool | `true` | Shows the thermostat valve opening percentage. |
+| `hud_ShowFlow` | bool | `true` | Shows heat generation and dissipation rates (Gen/Pas/Rad). |
+| `hud_ShowEff` | bool | `true` | Shows engine load and dirt penalty. |
+| `hud_ShowLimits` | bool | `true` | Shows safe max RPM and HP (with chiptuning if active). |
+| `hud_ShowFan` | bool | `true` | Shows the electric fan status line (Car profile only). |
+| `uiRefreshRateBaseMs` | number | `500` | Master HUD refresh interval in milliseconds. |
 
 ---
 
-#### 🔥 Física Geral
+#### 🔥 General Physics
 
-| Variável | Tipo | Padrão | Descrição |
+| Variable | Type | Default | Description |
 | :--- | :---: | :---: | :--- |
-| `globalSpeed` | number | `1.0` | Multiplicador global da velocidade de toda a física (1.0 = tempo real). |
-| `refAmbientTemp` | number | `20.0` | Temperatura ambiente de referência (ºC) usada em todos os cálculos. |
-| `minRpmForHeat` | number | `250` | RPM mínimas para o motor ser considerado "em funcionamento" e a gerar calor. |
-| `warmupFastMultiplier` | number | `2.0` | Multiplicador de calor no arranque a frio abaixo dos 60ºC (simula injeção rica). |
-| `autoCompensateWarmup` | bool | `true` | Ajusta automaticamente o calor base para que o tempo total de aquecimento seja respeitado mesmo com o multiplicador a frio ativo. |
+| `globalSpeed` | number | `1.0` | Global multiplier for all physics speed (1.0 = real-time). |
+| `refAmbientTemp` | number | `20.0` | Reference ambient temperature (ºC) used in all calculations. |
+| `minRpmForHeat` | number | `250` | Minimum RPM for the engine to be considered "running" and generating heat. |
+| `warmupFastMultiplier` | number | `2.0` | Cold-start heat multiplier below 60ºC (simulates rich fuel injection). |
+| `autoCompensateWarmup` | bool | `true` | Automatically adjusts base heat so total warmup time is respected even with cold multiplier active. |
 
 ---
 
-#### 🌡️ Termostato (Motor Arrefecido a Água)
+#### 🌡️ Thermostat (Water-Cooled Engine)
 
-| Variável | Tipo | Padrão | Descrição |
+| Variable | Type | Default | Description |
 | :--- | :---: | :---: | :--- |
-| `thermoStart` | number | `85.0` | Temperatura (ºC) a partir da qual a válvula começa a abrir. |
-| `thermoFull` | number | `90.0` | Temperatura (ºC) a partir da qual a válvula está completamente aberta. |
-| `timeToWarmupIdle` | number | `8.0` | Minutos para o motor aquecer do ambiente (20ºC) até `thermoStart` em ralenti. |
-| `timeToOverheatLoad` | number | `12.0` | Minutos para ir de `thermoFull` até `damageStart` a 100% de carga. |
-| `timeToCoolDown` | number | `120.0` | Minutos para o motor arrefecer de `thermoStart` até à temperatura ambiente. |
-| `damageStart` | number | `110.0` | Temperatura (ºC) a partir da qual o motor começa a sofrer dano. |
-| `ambientHeatingModifier` | number | `0.0` | Influência extra do clima no aquecimento por cada ºC acima da referência (0.0 = desligado). |
-| `ambientCoolingModifier` | number | `0.05` | Redução do arrefecimento por cada ºC acima da referência (0.05 = 5% por grau). |
-| `windCoolingMultiplier` | number | `0.02` | Eficiência extra do radiador por cada km/h de velocidade de deslocação (2% por km/h). |
+| `thermoStart` | number | `85.0` | Temperature (ºC) at which the thermostat valve starts opening. |
+| `thermoFull` | number | `90.0` | Temperature (ºC) at which the thermostat valve is fully open. |
+| `timeToWarmupIdle` | number | `8.0` | Minutes to warm up from ambient (20ºC) to `thermoStart` at idle. |
+| `timeToOverheatLoad` | number | `12.0` | Minutes to go from `thermoFull` to `damageStart` at 100% load. |
+| `timeToCoolDown` | number | `120.0` | Minutes for the engine to cool from `thermoStart` to ambient. |
+| `damageStart` | number | `110.0` | Temperature (ºC) at which the engine starts taking damage. |
+| `ambientHeatingModifier` | number | `0.0` | Extra heat influence per ºC of real weather above reference (0.0 = off). |
+| `ambientCoolingModifier` | number | `0.05` | Cooling slowdown per ºC of weather above reference (0.05 = 5% per degree). |
+| `windCoolingMultiplier` | number | `0.02` | Extra radiator efficiency per km/h of driving speed (2% per km/h). |
 
 ---
 
-#### ⚡ Veículos Elétricos (EV/Baterias)
+#### ⚡ Electric Vehicles (EV/Battery)
 
-| Variável | Tipo | Padrão | Descrição |
+| Variable | Type | Default | Description |
 | :--- | :---: | :---: | :--- |
-| `ev_thermoStart` | number | `25.0` | Temperatura (ºC) a partir da qual o BTMS começa a arrefecer o pack de baterias. |
-| `ev_thermoFull` | number | `35.0` | Temperatura (ºC) em que o arrefecimento do BTMS está no máximo. |
-| `ev_optimalTemp` | number | `20.0` | Temperatura ideal das baterias. O BTMS aquece até este valor quando a frio. |
-| `ev_damageStart` | number | `65.0` | Temperatura (ºC) a partir da qual as baterias começam a sofrer dano. |
+| `ev_thermoStart` | number | `25.0` | Temperature (ºC) at which the BTMS starts cooling the battery pack. |
+| `ev_thermoFull` | number | `35.0` | Temperature (ºC) at which the BTMS cooling is at maximum. |
+| `ev_optimalTemp` | number | `20.0` | Ideal battery temperature. The BTMS heats up to this when cold. |
+| `ev_damageStart` | number | `65.0` | Temperature (ºC) at which the batteries start taking damage. |
 
 ---
 
-#### 💨 Motor Arrefecido a Ar
+#### 💨 Air-Cooled Engine
 
-| Variável | Tipo | Padrão | Descrição |
+| Variable | Type | Default | Description |
 | :--- | :---: | :---: | :--- |
-| `air_fanCoolingMultiplier` | number | `1.0` | Multiplicador da potência de arrefecimento pela ventoinha (escala com RPM + vento). |
+| `air_fanCoolingMultiplier` | number | `1.0` | Multiplier for fan-driven cooling power (scales with RPM + wind). |
 
 ---
 
-#### 🔧 Dano por Motor Frio
+#### 🚗 Car Profile *(New in v8.1)*
 
-| Variável | Tipo | Padrão | Descrição |
+| Variable | Type | Default | Description |
 | :--- | :---: | :---: | :--- |
-| `enableColdRpmDamage` | bool | `true` | O motor sofre dano se as RPMs excederem o limite seguro com o motor frio. |
-| `enableColdLoadDamage` | bool | `true` | O motor sofre dano se a carga exceder o limite seguro com o motor frio. |
-| `coldDamageTempThreshold` | number | `60.0` | Temperatura (ºC) abaixo da qual as regras de dano a frio se aplicam. |
-| `maxColdDamagePerSec` | number | `0.01` | Dano máximo aplicado por segundo ao forçar com óleo frio. |
-| `limitRpmAtRef` | number | `0.60` | RPM máximas seguras como fração das RPM máximas à temperatura ambiente (60%). |
-| `limitLoadAtRef` | number | `0.50` | Fração de carga máxima segura com o motor frio (50%). |
+| `car_thermoStart` | number | `80.0` | Temperature (ºC) at which the car thermostat starts opening. |
+| `car_thermoFull` | number | `87.0` | Temperature (ºC) at which the car thermostat is fully open. |
+| `car_warmupTime` | number | `2.0` | Minutes to warm up from ambient temperature to `car_thermoStart`. |
+| `car_windCoolingMultiplier` | number | `0.05` | Cooling gain per km/h while driving (radiator wind effect). |
+| `car_fanOnTemp` | number | `95.0` | Temperature (ºC) at which the electric fan activates (independent of the valve). |
+| `car_fanPower` | number | `0.70` | Electric fan cooling power as a fraction of `cooling_power_max` (70%). |
 
 ---
 
-#### 💥 Avaria do Termostato & Paragem por Sobreaquecimento
+#### 🔧 Cold Engine Damage
 
-| Variável | Tipo | Padrão | Descrição |
+| Variable | Type | Default | Description |
 | :--- | :---: | :---: | :--- |
-| `enableDamageEffects` | bool | `true` | Ativa o sistema de avaria física da válvula do termostato. |
-| `damageStartThreshold` | number | `0.70` | Nível de dano do trator (0–1) que despoleta o sorteio de avaria do termostato. |
-| `thermostatFailChance` | number | `0.50` | Probabilidade (0–1) de o termostato falhar fisicamente quando o dano cruza o limiar. |
-| `damageFullFailure` | number | `0.90` | Nível de dano em que a severidade da avaria atinge 100%. |
-| `enableOverheatStall` | bool | `true` | O motor pode parar se a temperatura exceder `damageStart` + delta. |
-| `overheatStallStartDelta` | number | `5.0` | Graus acima de `damageStart` antes de começar o risco de paragem (padrão: 115ºC). |
-| `overheatStallChancePerSec` | number | `0.015` | Probabilidade base de paragem por segundo em sobreaquecimento crítico (1.5%/s). |
+| `enableColdRpmDamage` | bool | `true` | Engine takes damage if RPMs exceed the safe limit while cold. |
+| `enableColdLoadDamage` | bool | `true` | Engine takes damage if load exceeds the safe limit while cold. |
+| `coldDamageTempThreshold` | number | `60.0` | Temperature (ºC) below which cold damage rules apply. |
+| `maxColdDamagePerSec` | number | `0.01` | Max damage applied per second while running cold at limit. |
+| `limitRpmAtRef` | number | `0.60` | Max safe RPM as a fraction of max RPM when at ambient temp (60%). |
+| `limitLoadAtRef` | number | `0.50` | Max safe load fraction when engine is cold (50%). |
 
 ---
 
-#### 🚨 Paragem e Bloqueio de Arranque por Dano *(Novo na v8)*
+#### 💥 Thermostat Failure & Overheating Stall
 
-| Variável | Tipo | Padrão | Descrição |
+| Variable | Type | Default | Description |
 | :--- | :---: | :---: | :--- |
-| `enableDamageStall` | bool | `true` | O motor pode parar ou recusar arrancar com base no desgaste do trator. |
-| `damageStallThreshold` | number | `0.80` | Nível de dano (0–1) a partir do qual começa o risco de paragem aleatória (80%). |
-| `damageStallChancePerSec` | number | `0.010` | Probabilidade base de paragem por segundo entre 80% e 95% de dano (1%/s). |
-| `damageNoStartThreshold` | number | `0.95` | Nível de dano a partir do qual o motor **não consegue arrancar de todo** (95%). |
+| `enableDamageEffects` | bool | `true` | Enables the thermostat valve failure system. |
+| `damageStartThreshold` | number | `0.70` | Tractor damage level (0–1) that triggers the thermostat failure roll. |
+| `thermostatFailChance` | number | `0.50` | Probability (0–1) that the thermostat physically fails when damage crosses the threshold. |
+| `damageFullFailure` | number | `0.90` | Damage level at which thermostat failure severity reaches 100%. |
+| `enableOverheatStall` | bool | `true` | Engine can stall if temperature exceeds `damageStart` + delta. |
+| `overheatStallStartDelta` | number | `5.0` | Degrees above `damageStart` before stall risk begins (default: 115ºC). |
+| `overheatStallChancePerSec` | number | `0.015` | Base chance per second of stalling when critically overheated (1.5%/s). |
 
 ---
 
-#### 🔗 Integrações com outros Mods
+#### 🚨 Damage-Driven Stall & Start Lock *(New in v8)*
 
-| Variável | Tipo | Padrão | Descrição |
+| Variable | Type | Default | Description |
 | :--- | :---: | :---: | :--- |
-| `integ_AEP_Enabled` | bool | `true` | Ativa a integração com o mod *Adjustable Engine Power* (AEP). |
-| `integ_AEP_heatStage1` | number | `1.10` | Multiplicador de calor para o Stage 1 do AEP (chiptuning +10%). |
-| `integ_AEP_heatStage2` | number | `1.15` | Multiplicador de calor para o Stage 2 do AEP (chiptuning +15%). |
-| `integ_AEP_heatStage3` | number | `1.20` | Multiplicador de calor para o Stage 3 do AEP (chiptuning +20%). |
+| `enableDamageStall` | bool | `true` | Engine can stall or refuse to start based on tractor wear level. |
+| `damageStallThreshold` | number | `0.80` | Damage level (0–1) at which random mid-work stalling begins (80%). |
+| `damageStallChancePerSec` | number | `0.010` | Base stall chance per second between 80% and 95% damage (1%/s). |
+| `damageNoStartThreshold` | number | `0.95` | Damage level at which the engine **cannot be started at all** (95%). |
 
 ---
 
-## 🌍 Suporte de Idiomas
-O RET está totalmente traduzido nos seguintes idiomas:
-🇬🇧 Inglês | 🇵🇹 Português | 🇩🇪 Alemão | 🇫🇷 Francês | 🇪🇸 Espanhol | 🇺🇦 Ucraniano
+#### 🔗 Mod Integrations
+
+| Variable | Type | Default | Description |
+| :--- | :---: | :---: | :--- |
+| `integ_AEP_Enabled` | bool | `true` | Enables integration with the *Adjustable Engine Power* (AEP) mod. |
+| `integ_AEP_heatStage1` | number | `1.10` | Heat multiplier for AEP Stage 1 chiptuning (+10%). |
+| `integ_AEP_heatStage2` | number | `1.15` | Heat multiplier for AEP Stage 2 chiptuning (+15%). |
+| `integ_AEP_heatStage3` | number | `1.20` | Heat multiplier for AEP Stage 3 chiptuning (+20%). |
 
 ---
 
-## 🤝 Integração Total
-Totalmente compatível não apenas com o Farming Simulator nativo 25 mas também testado para interligação orgânica com outros Mods Famosos de Modding, como o módulo de **Adjustable Engine Power**. Onde aumentos de 10% a 20% do Chip Tuning irão multiplicar permanentemente o calor desferido dentro do bloco do motor, sendo necessário ventoinhas maiores!
+## 🌍 Language Support
+RET is fully localized in the following languages:
+🇬🇧 English | 🇵🇹 Portuguese | 🇩🇪 German | 🇫🇷 French | 🇪🇸 Spanish | 🇺🇦 Ukrainian
 
-Feito a pensar nos Roleplayers mais exigentes de agricultura. Desfruta!
+---
+
+## 🤝 Full Integration
+Fully compatible not only with native Farming Simulator 25 but also tested for organic interconnection with other Famous Modding Mods, like the **Adjustable Engine Power** module. Where 10% to 20% increases from Chip Tuning will permanently multiply the unleashed heat inside the engine block, requiring larger fans!
+
+Crafted with the most demanding farming Roleplayers in mind. Enjoy!
 
