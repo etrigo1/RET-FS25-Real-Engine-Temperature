@@ -4,7 +4,7 @@
 
 | | Version | Status |
 |:---:|:---|:---:|
-| 🟢 | **8.2.0** — Stable Release | ![Stable](https://img.shields.io/badge/Stable-8.2.0-brightgreen) |
+| 🟢 | **8.2.0** — Stable Release | [![Stable](https://img.shields.io/badge/Status-Stable-brightgreen)](https://github.com/etrigo1/RET-FS25-Real-Engine-Temperature/releases) |
 
 **Farming Simulator 25**
 
