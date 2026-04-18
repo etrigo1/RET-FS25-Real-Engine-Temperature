@@ -2,10 +2,6 @@
 
 # 🚜 Realistic Engine Temperature (RET)
 
-| | Versão | Estado |
-|:---:|:---|:---:|
-| 🟢 | **8.2.0** — Versão Estável | [![Stable](https://img.shields.io/badge/Estado-Estável-brightgreen)](https://github.com/etrigo1/RET-FS25-Real-Engine-Temperature/releases) |
-
 **Farming Simulator 25**
 
 O **Realistic Engine Temperature (RET)** é um mod de física avançada concebido para o Farming Simulator 25. Ele desativa a temperatura mecânica nativa e utópica do jogo base, substituíndo-a por um modelo termodinâmico hiper-realista.
